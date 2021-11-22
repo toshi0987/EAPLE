@@ -1,0 +1,65 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html"; charset="UTF-8">
+    <meta http-equiv="content-style-type" content="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined"rel="stylesheet">
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth'
+        });
+        calendar.render();
+      });
+    </script>
+    <title>健康管理アプリEAPLE</title>
+    {%block head%}
+    {%endblock%}
+</head>
+<body >
+	<header style="width:100%;height:20%;">
+		<div class="title">健康管理アプリEAPLE</div>
+		
+		<div class="menubar">
+		<!-- ハンバーガーメニュー部分 -->
+		<div class="drawer">
+
+		<!-- ハンバーガーメニューの表示・非表示を切り替えるチェックボックス -->
+		<input type="checkbox" id="drawer-check" class="drawer-hidden" >
+
+		<!-- ハンバーガーアイコン -->
+		<label for="drawer-check" class="drawer-open"><span></span></label>
+		
+
+		<!-- メニュー -->
+		
+		<nav class="drawer-content">
+			<ul class="drawer-list">
+				<li class="drawer-item">
+					<a href="/">home</a>
+				</li><!-- /.drawer-item -->
+				<li class="drawer-item">
+					<a href="/calendar">calendar</a>
+				</li><!-- /.drawer-item -->
+				
+				<li class="drawer-item">
+					<a href="/view_data">user page</a>
+				</li><!-- /.drawer-item -->
+			</ul><!-- /.drawer-list -->
+		</nav>
+
+		
+		</div>
+	</header>
+
+	{%block content%}
+	{%endblock%}
+</body>
+<html>

@@ -1,0 +1,89 @@
+﻿<!--
+----------------
+データ入力画面
+----------------
+-->
+
+
+{%extends "base.html"%}
+
+
+{%block head%}
+<link rel="stylesheet" href="{{url_for('static',filename='select.css')}}">
+{%endblock%}
+
+
+{%block content%}
+
+	<div class='userinput-bg'>
+	<div class='time1'>
+		<h2>{{id}}</h2>
+	</div>
+	
+	<form method='post'enctype="multipart/form-data"action='/select/{{id}}'name="submit_form">
+	<!----ラジオボタン----------------------------->
+	<input type="radio" name="meal_time" value="0" id="breakfast">
+	<label for="breakfast" class="radiolabel">朝食</label>
+
+	<input type="radio" name="meal_time" value="1" id="lanch">
+	<label for="lanch" class="radiolabel">昼食</label>
+
+	<input type="radio" name="meal_time" value="2" id="dinner">
+	<label for="dinner" class="radiolabel">夕食</label>
+	
+	<input type="radio" name="meal_time" value="3" id="snack">
+	<label for="snack" class="radiolabel">その他</label>
+	
+	
+	
+	<br>
+	<div class="imageinput">
+	<input type="file" id="fileField"name="fileField"><br>
+	<div id="bg"style="width:400px;  height:250px; border:1px solid black"></div>
+	
+	<input type="text" name="dishname"id="prediction">
+	<input type="submit"value="finish">
+	</div>
+	</form>
+	</div>
+
+	<script>
+		$(function(){
+
+		  var successResult = function(data){
+		    document.getElementById("prediction").value=data.pred
+		  };
+		  
+		  var failureResult = function(data){
+		    alert("Didn't work");
+		  };
+
+		  var fileChange = function(evt){
+		    var fileOb = $("#fileField")[0].files[0];
+		    var formData = new FormData();
+		    formData.append("picfile", fileOb);
+		    var req = {
+		      url: "/select/{{id}}",
+		      method: "post",
+		      processData: false,
+		      contentType: false,
+		      data: formData
+		    };
+
+		    var promise = $.ajax(req);
+		    promise.then(successResult, failureResult);
+		    
+		    var reader=new FileReader();
+		    reader.readAsDataURL(fileOb);
+		    reader.onload = function(){
+		      var dataUrl = reader.result;
+
+		      //読み込んだ画像を書き出す
+		      document.getElementById("bg").innerHTML = "<img src='" + dataUrl + "'width=400px height=250px>";
+		  };
+		  };
+		  
+		  $("#fileField").change(fileChange);
+		});
+	</script>
+{%endblock%}

@@ -1,0 +1,113 @@
+﻿{%extends "base.html"%}
+
+
+{%block head%}
+<link rel="stylesheet" href="{{url_for('static',filename='view_data.css')}}">
+{%endblock%}
+
+
+
+{%block content%}
+	
+<!------------------------------------------------------------
+ここから下にグラフ表示させる
+------------------------------------------------------------->
+<div class='userdata'>
+  <canvas id="cvs1" width="450" height="450"></canvas>
+
+  <script>
+      //  var datas = [5,30,20,80,40,100,70];
+      var datas = {{weekCal}};
+      var weekData={{weekList|tojson}};
+      var week = weekData.reverse();
+      //var week=['11/06','11/07','11/08','11/09','11/10','11/11','11/12'];
+     
+    yMax = Math.max.apply({}, datas);
+    window.onload = function() {
+      var cv1 = document.getElementById('cvs1');
+      var ctx = cv1.getContext('2d');
+        if (!cv1||!cv1.getContext) { return false; }
+      var spcW=40;            // Y軸左のスペース
+      var spcH=30;            // X軸下のスペース
+      var groundW= cv1.getAttribute("width")-spcW; // グラフ領域W
+      var groundH= cv1.getAttribute("height")-spcH;// グラフ領域H
+      var groundX0= spcW; var groundY0= groundH;   // 原点位置
+      var pichX = groundW/datas.length;            // X目盛ピッチ
+      DmYMx = Math.pow(10,Math.ceil(Math.log(yMax)/Math.log(10)));
+        var cnstH= 210/DmYMx;
+        pichH = DmYMx/4;                           //Y目盛ピッチ   
+        ctx.beginPath();                  //現在のパスをリセット
+        ctx.save();                       //現在の描画条件を保管
+        // タイトル描画
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.font = "12pt Arial";
+        ctx.fillStyle = "rgb(0,0,180)";
+        ctx.fillText('摂取カロリー',groundX0-10+0.5*groundW, 5 );
+        ctx.restore();                    //描画条件を元に戻す
+        ctx.save();                       //現在の描画条件を保管
+        // X軸描画
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.strokeStyle = "rgb(0,0,0)";
+        ctx.moveTo( groundX0, groundY0 );
+        ctx.lineTo( groundX0+groundW-20, groundY0 );
+        for (var i = 0; i < groundW/pichX; i++){
+          ctx.moveTo( groundX0+i*pichX, groundY0 );
+          ctx.lineTo( groundX0+i*pichX, groundY0-5 );
+          ctx.fillText(week[i],groundX0+i*pichX,groundY0+2 );
+        }
+        ctx.fillText('日',0.5*groundW+groundX0,groundY0+15 );
+        // Y軸描画
+        ctx.moveTo( groundX0, groundY0 );
+        ctx.lineTo( groundX0, 25 );
+        ctx.textAlign = "end";
+        ctx.textBaseline = "middle";
+        for (var i = 0; i < groundH/pichH/cnstH-1; i++){
+          ctx.moveTo( groundX0, groundY0-i*pichH*cnstH );
+          ctx.lineTo( groundX0+5, groundY0-i*pichH*cnstH );
+          ctx.fillText(i*pichH,groundX0-3,groundY0-i*pichH*cnstH );
+        }
+        ctx.rotate(-0.5* Math.PI);
+        ctx.fillText('カロリー',-0.45*groundY0,groundX0-30 );
+        ctx.stroke();                     //サブパスを描画
+        ctx.restore();                    //描画条件を元に戻す
+        ctx.save();                       //現在の描画条件を保管
+        ctx.beginPath();                  //現在のパスをリセット
+        // line
+        ctx.fillStyle = "rgb(250,0,0)";
+        ctx.strokeStyle = "rgb(250,0,0)";
+        for (var i = 0; i < datas.length; i++){
+          ctx.moveTo(groundX0+i*pichX, groundY0-cnstH*datas[i]);
+          if (i!=0){ ctx.lineTo(groundX0+(i-1)*pichX, groundY0-cnstH*datas[i-1]);}
+          ctx.fillRect(groundX0+i*pichX-2, groundY0-cnstH*datas[i]-2,4,4);
+          ctx.textBaseline = "bottom"; ctx.textAlign = "center";
+          ctx.fillText(datas[i], groundX0+i*pichX, groundY0-cnstH*datas[i]);
+        }
+        ctx.stroke();                     //サブパスを描画
+        ctx.restore();                    //描画条件を元に戻す
+    }; // end of onload -----------------------
+  </script>
+	
+	
+	<!--リコメンド料理表示-->
+	<div style='width:auto;heigt:auto;background-image:url(recommend_image.png);'>	
+	<div class="recommendbox">
+	<font size="5">
+	<div>本日のおすすめ料理</div><br>
+	<div>{{dishname_ja[recommend_dish[0]]}}</div><br>
+	</font>
+	<font size="3">
+	<div>カロリー：{{recommend_dish[1]}}kcal</div>
+	<div>タンパク質：{{recommend_dish[2]}}</div>
+	<div>脂質：{{recommend_dish[3]}}</div>
+	<div>炭水化物：{{recommend_dish[4]}}</div>
+	<div>食塩：{{recommend_dish[5]}}</div>
+	<div>野菜量：{{recommend_dish[6]}}</div>
+	</font>
+	</div>
+</div>
+<!--------------------------------------------------------	
+ここから上まで
+--------------------------------------------------------->
+{%endblock%}

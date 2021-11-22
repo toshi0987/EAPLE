@@ -1,0 +1,60 @@
+﻿<!--
+2021.10.20
+base.htmlをextendsしているので、body要素の中身を、
+blockcontent～endblockの間に記述させる。
+styleに関しては、style.cssに記述する予定
+-->
+<!--
+----------------
+確認画面
+----------------
+-->
+
+{%extends "base.html"%}
+
+
+{%block head%}
+<link rel="stylesheet" href="{{url_for('static',filename='view_record.css')}}">
+{%endblock%}
+
+
+{%block content%}
+
+	<div class='record-bg'>
+	<div class='time2'>
+		<h2>{{id}}</h2>
+	</div>
+	
+	<div>
+		{%for post in posts%}
+			<div class='one-record'>
+			{% if post[1]=='0' %}
+				<span>朝食 &nbsp;: &nbsp;</span>
+			{% elif post[1]=='1' %}
+				<span>昼食 &nbsp;: &nbsp;</span>
+			{% elif post[1]=='2' %}
+				<span>夕食 &nbsp;: &nbsp;</span>
+			{%else%}
+				<span>その他 &nbsp;: &nbsp;</span>
+			{%endif%}
+			
+			<span>{{dishname_ja[post[2]]}}</span>
+			
+			{%for cal in dishdata%}
+				{%if cal[0]==post[2]%}
+					<span>&nbsp;({{cal[1]}}kcal)</span>
+				{%endif%}
+			{%endfor%}
+			</div>
+			<br>
+		{%endfor%}
+		
+	</div>
+	
+	<div>
+	<a href="/select/{{id}}">
+	<span class="plus-icons">add_circle</span>
+	</a>
+	</div>
+	</div>
+{%endblock%}

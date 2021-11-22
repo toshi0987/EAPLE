@@ -1,0 +1,36 @@
+﻿<!--
+2021.10.20
+base.htmlをextendsしているので、body要素の中身を、
+blockcontent～endblockの間に記述させる。
+styleに関しては、style.cssに記述する予定
+-->
+
+<!--
+----------------
+ホーム画面
+----------------
+-->
+
+{%extends "base.html"%}
+
+{%block head%}
+<link rel="stylesheet" href="{{url_for('static',filename='index.css')}}">
+{%endblock%}
+
+
+{%block content%}
+	<div style='margin-left:15%;margin-top:11%'>
+	<font size="6.5"face="SimSun"> 手軽に</font>
+	</div>
+	<font size="1"></font><br>
+	<div style='margin-left:18%;'>
+	<font size="6.5"face="SimSun">簡単に</font>
+	</div><font size="1"></font><br>
+	<div style='margin-left:21%;'>
+	<font size="6.5"face="SimSun">シンプルに</font>
+	</div>
+	<font size="1"></font><br>
+	<div style='margin-left:13%;'>
+	<font size="5.5"face="cursive">- Easy & Simple Health Care -</font>
+	</div>
+{%endblock%}
