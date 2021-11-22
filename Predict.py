@@ -1,13 +1,13 @@
 #import numpy as np
-from tqdm import tqdm
+#from tqdm import tqdm
 from PIL import Image
 import torch.nn as nn
 from torch.autograd import Variable
 import torch
 import torchvision.transforms as transforms
 import torchvision.models as models
-import torchvision
-from Energy import Energy
+#import torchvision
+#from Energy import Energy
 
 class Predict:
 	def __init__(self):
